@@ -24,16 +24,29 @@ const Header = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (dropdownOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [dropdownOpen]);
+
+  const handleDropdownLinkClick = () => {
+    setDropdownOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    navigate("/login"); // Redirige a la página de inicio de sesión
+    setDropdownOpen(false);
+  };
+
   let Links = [
     { name: "Home", link: "/" },
     { name: "New Event", link: "/new" },
     { name: "About", link: "/about" },
     { name: "Contact", link: "/contact" },
   ];
-
-  const handleLoginClick = () => {
-    navigate("/login"); // Redirige a la página de inicio de sesión
-  };
 
   return (
     <div className="shadow-md w-full relative top-0 left-0 z-50">
@@ -65,6 +78,7 @@ const Header = () => {
               <Link
                 to={link.link}
                 className="text-gray-800 hover:text-blue-400 duration-500"
+                onClick={() => setOpen(false)} // Cierra el menú al hacer clic en un enlace
               >
                 {link.name}
               </Link>
@@ -113,6 +127,7 @@ const Header = () => {
                     {user ? "Cerrar sesión" : "Iniciar sesión"}
                   </button>
                 </li>
+                {/* Añadir más opciones de menú aquí si es necesario */}
               </ul>
             </div>
           )}
