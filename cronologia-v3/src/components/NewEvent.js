@@ -12,7 +12,7 @@ const NewEvent = () => {
   // Fetch categories from the backend
   useEffect(() => {
     axios
-      .get("http://localhost:4000/categories")
+      .get("https://cronology-v3.onrender.com/categories")
       .then((response) => {
         const categoryOptions = response.data.map((cat) => ({
           value: cat._id,
@@ -36,7 +36,7 @@ const NewEvent = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/events",
+        "https://cronology-v3.onrender.com/events",
         newEvent
       );
       console.log("Event created successfully:", response.data);

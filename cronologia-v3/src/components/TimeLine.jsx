@@ -9,7 +9,7 @@ function TimeLine() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/events")
+      .get("https://cronology-v3.onrender.com/events")
       .then((response) => {
         let sortedEvents = response.data;
 
