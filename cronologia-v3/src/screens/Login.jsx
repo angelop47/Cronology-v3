@@ -1,32 +1,20 @@
 // src/components/Login.js
 import React from "react";
 import { useAuth } from "../components/useAuth";
+import LoginButton from "../components/LoginButton";
+import LogoutButton from "../components/LogoutButton";
 
 const Login = () => {
-  const { user, signInWithGoogle } = useAuth();
-
-  const handleLoginClick = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-    }
-  };
+  const { user } = useAuth();
 
   return (
     <div>
-      {!user && (
-        <button
-          onClick={handleLoginClick}
-          className="btn bg-blue-600 text-white font-semibold px-3 py-1 rounded duration-500"
-        >
-          Iniciar sesión con Google
-        </button>
-      )}
-      {user && (
+      {!user ? (
+        <LoginButton />
+      ) : (
         <div>
-          {/* Aquí podrías redirigir al usuario a la página que desees después de iniciar sesión */}
           <p>Bienvenido, {user.displayName}</p>
+          <LogoutButton />
         </div>
       )}
     </div>

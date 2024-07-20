@@ -10,7 +10,7 @@ const LogoutButton = () => {
     }
   };
 
-  return <button onClick={handleLogout}>Log Out</button>;
+  return <button onClick={handleLogout}>Cerrar sesión</button>;
 };
 
 export default LogoutButton;

@@ -9,7 +9,6 @@ import About from "./screens/About";
 import Contact from "./screens/Contact";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./screens/Login";
-import Navbar from "./components/Navbar";
 import LoginButton from "./components/LoginButton";
 import LogoutButton from "./components/LogoutButton";
 
@@ -17,10 +16,9 @@ function App() {
   return (
     <div>
       <Header />
-      {/* <Navbar /> */}
-      <LoginButton />
+      {/* <LoginButton />
       <br></br>
-      <LogoutButton />
+      <LogoutButton /> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route

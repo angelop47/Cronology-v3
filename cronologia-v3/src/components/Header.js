@@ -1,23 +1,14 @@
-// src/components/Header.js
 import React, { useState, useEffect, useRef } from "react";
 import { Bars3BottomRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "./useAuth";
-import { Link } from "react-router-dom"; // Importa Link desde react-router-dom
-import { signOut, auth } from "../utils/firebase-config";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { user, signOut } = useAuth();
-
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Error during logout:", error);
-    }
-  };
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -41,16 +32,7 @@ const Header = () => {
   ];
 
   const handleLoginClick = () => {
-    // Aquí podrías redirigir a la página de inicio de sesión o abrir un modal de inicio de sesión
-    console.log("Login clicked");
-  };
-
-  const handleLogoutClick = async () => {
-    try {
-      await signOut();
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
+    navigate("/login"); // Redirige a la página de inicio de sesión
   };
 
   return (
@@ -122,61 +104,16 @@ const Header = () => {
           </div>
           {dropdownOpen && (
             <div className="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 absolute right-0 mt-2">
-              {user ? (
-                <>
-                  <div className="px-4 py-3">
-                    <span className="block text-sm text-gray-900 dark:text-white">
-                      {user.displayName}
-                    </span>
-                    <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                      {user.email}
-                    </span>
-                  </div>
-                  <ul className="py-2">
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Dashboard
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Settings
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Earnings
-                      </a>
-                    </li>
-                    <li>
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                      >
-                        Logout
-                      </button>
-                    </li>
-                  </ul>
-                </>
-              ) : (
-                <div className="px-4 py-3">
-                  <Link
-                    to="/login"
-                    className="block text-sm text-gray-900 dark:text-white"
+              <ul className="py-2">
+                <li>
+                  <button
+                    onClick={handleLoginClick}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                   >
-                    Iniciar sesión
-                  </Link>
-                </div>
-              )}
+                    {user ? "Cerrar sesión" : "Iniciar sesión"}
+                  </button>
+                </li>
+              </ul>
             </div>
           )}
         </div>

@@ -12,7 +12,7 @@ const LoginButton = () => {
     }
   };
 
-  return <button onClick={handleLogin}>Log In with Google</button>;
+  return <button onClick={handleLogin}>Iniciar sesión con Google</button>;
 };
 
 export default LoginButton;
