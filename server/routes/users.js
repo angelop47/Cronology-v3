@@ -1,68 +1,35 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
-
 const router = express.Router();
+const User = require("../models/User");
 
-// Crear un nuevo usuario
-router.post("/", async (req, res) => {
-  try {
-    const user = new User(req.body);
-    await user.save();
-    res.status(201).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+// Ruta para manejar la autenticación con Google
+router.post("/auth/google", async (req, res) => {
+  const { name, email, photo } = req.body;
 
-// Obtener todos los usuarios
-router.get("/", async (req, res) => {
   try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+    // Buscar si el usuario ya existe
+    let user = await User.findOne({ email });
 
-// Obtener un usuario por su ID
-router.get("/:id", async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    if (user) {
+      // Si el usuario ya existe, actualizar los datos
+      user.name = name;
+      user.photo = photo;
+      await user.save();
+    } else {
+      // Si el usuario no existe, crear un nuevo usuario
+      user = new User({
+        name,
+        email,
+        password: "google-auth", // Esto es solo un marcador de posición, ya que la autenticación real se maneja por Firebase
+        photo,
+      });
+      await user.save();
     }
+
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Actualizar un usuario
-router.put("/:id", async (req, res) => {
-  try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Eliminar un usuario
-router.delete("/:id", async (req, res) => {
-  try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(204).send();
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error al guardar el usuario:", error);
+    res.status(500).json({ message: "Error al guardar el usuario" });
   }
 });
 

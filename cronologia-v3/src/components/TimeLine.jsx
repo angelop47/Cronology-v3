@@ -1,25 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function TimeLine() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(1); // Estado para la página actual
-  const [hasMore, setHasMore] = useState(true); // Estado para indicar si hay más eventos por cargar
   const [sortByNewest, setSortByNewest] = useState(true); // Estado para controlar el orden
 
-  const loadEvents = useCallback(() => {
-    if (!hasMore) return; // No hacer solicitudes si no hay más eventos
-
-    setLoading(true);
+  useEffect(() => {
     axios
-      .get("https://cronology-v3.onrender.com/events", {
-        params: {
-          page: page,
-          limit: 10, // Número de eventos por solicitud
-        },
-      })
+      .get("https://cronology-v3.onrender.com/events")
       .then((response) => {
         let sortedEvents = response.data;
 
@@ -38,57 +28,21 @@ function TimeLine() {
           date: new Date(event.date).toISOString().slice(0, 10),
         }));
 
-        // Verificar si hay más eventos que cargar
-        const moreEventsAvailable = sortedEvents.length > 0;
-
-        // Agregar eventos nuevos si estamos en la primera página, de lo contrario concatenar
-        setEvents((prevEvents) => {
-          // Si estamos cargando la primera página, reemplazamos los eventos anteriores
-          if (page === 1) {
-            return sortedEvents;
-          }
-          // Si estamos cargando eventos adicionales, evitamos duplicados
-          const existingIds = new Set(prevEvents.map((event) => event._id));
-          return [
-            ...prevEvents,
-            ...sortedEvents.filter((event) => !existingIds.has(event._id)),
-          ];
-        });
-
-        // Actualizar hasMore dependiendo de si hay más eventos en la respuesta
-        setHasMore(moreEventsAvailable);
-
-        // Si no hay eventos en la respuesta y estamos en la primera página, indicamos que no hay más eventos
-        if (!moreEventsAvailable && page === 1) {
-          setHasMore(false);
-        }
-
+        setEvents(sortedEvents);
         setLoading(false);
       })
       .catch((error) => {
         setError(error.message);
         setLoading(false);
       });
-  }, [page, sortByNewest, hasMore]);
-
-  useEffect(() => {
-    loadEvents();
-  }, [page, sortByNewest, loadEvents]);
+  }, [sortByNewest]); // Dependencia para actualizar cuando cambie la opción de orden
 
   const handleSortToggle = () => {
     // Cambiar la opción de orden al hacer clic en el botón
     setSortByNewest((prevSortByNewest) => !prevSortByNewest);
-    setEvents([]); // Limpiar los eventos actuales
-    setPage(1); // Reiniciar la página
-    setHasMore(true); // Restablecer hasMore al cambiar el orden
   };
 
-  const handleLoadMore = () => {
-    if (!hasMore || loading) return; // No hacer nada si no hay más eventos o si está cargando
-    setPage((prevPage) => prevPage + 1);
-  };
-
-  if (loading && events.length === 0) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -149,19 +103,6 @@ function TimeLine() {
             </li>
           ))}
         </ol>
-        {hasMore && !loading && (
-          <button
-            className="mt-4 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-            onClick={handleLoadMore}
-          >
-            Cargar más
-          </button>
-        )}
-        {!hasMore && !loading && events.length > 0 && (
-          <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-            No hay más eventos para cargar.
-          </div>
-        )}
       </div>
     </div>
   );
