@@ -16,8 +16,11 @@ const firebaseConfig = {
   measurementId: "G-0032CHWGQD",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Export auth and provider for use in other files
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-export { auth, provider, signInWithPopup, signOut };
+export { auth, provider, signInWithPopup, signOut, app };
