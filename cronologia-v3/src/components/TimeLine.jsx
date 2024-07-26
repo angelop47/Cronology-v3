@@ -1,46 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 
 function TimeLine() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [sortByNewest, setSortByNewest] = useState(true); // Estado para controlar el orden
+  const [sortByNewest, setSortByNewest] = useState(true);
 
   useEffect(() => {
     axios
       .get("https://cronology-v3.onrender.com/events")
       .then((response) => {
-        let sortedEvents = response.data;
+        const sortedEvents = response.data.sort((a, b) =>
+          sortByNewest
+            ? new Date(b.date) - new Date(a.date)
+            : new Date(a.date) - new Date(b.date)
+        );
 
-        // Ordenar eventos según la opción seleccionada
-        sortedEvents = sortedEvents.sort((a, b) => {
-          if (sortByNewest) {
-            return new Date(b.date) - new Date(a.date);
-          } else {
-            return new Date(a.date) - new Date(b.date);
-          }
-        });
-
-        // Formatear las fechas para mostrar solo "yyyy-mm-dd"
-        sortedEvents = sortedEvents.map((event) => ({
+        const formattedEvents = sortedEvents.map((event) => ({
           ...event,
           date: new Date(event.date).toISOString().slice(0, 10),
         }));
 
-        setEvents(sortedEvents);
+        setEvents(formattedEvents);
         setLoading(false);
       })
       .catch((error) => {
         setError(error.message);
         setLoading(false);
       });
-  }, [sortByNewest]); // Dependencia para actualizar cuando cambie la opción de orden
+  }, [sortByNewest]);
 
   const handleSortToggle = () => {
-    // Cambiar la opción de orden al hacer clic en el botón
     setSortByNewest((prevSortByNewest) => !prevSortByNewest);
   };
+
+  const memoizedEvents = useMemo(() => events, [events]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -48,7 +43,6 @@ function TimeLine() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900 py-12">
       <div className="w-10/12 sm:w-3/4 lg:w-1/2 p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
-        {/* Botón para cambiar el orden de los eventos */}
         <button
           className="mb-4 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
           onClick={handleSortToggle}
@@ -58,7 +52,7 @@ function TimeLine() {
             : "Mostrar desde más reciente"}
         </button>
         <ol className="relative border-l border-gray-200 dark:border-gray-700">
-          {events.map((event) => (
+          {memoizedEvents.map((event) => (
             <li key={event._id} className="mb-10 ml-4">
               <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
               <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
@@ -74,11 +68,6 @@ function TimeLine() {
                 Categoría:{" "}
                 {event.categoryId ? event.categoryId.name : "Sin categoría"}
               </p>
-              {/* <img
-                src={event.image}
-                alt={event.name}
-                className="mb-4 rounded-lg"
-              /> */}
               <a
                 href="#"
                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700"
