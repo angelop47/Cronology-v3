@@ -30,6 +30,13 @@ app.use(cors());
 
 app.use(express.json());
 
+// En tu servidor, por ejemplo usando Express.js
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  res.setHeader("Cross-Origin-Embedder-Policy", "unsafe-none");
+  next();
+});
+
 // Usar las rutas
 app.use("/users", userRouter);
 app.use("/categories", categoryRouter);

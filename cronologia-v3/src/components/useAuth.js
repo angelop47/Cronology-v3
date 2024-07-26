@@ -42,6 +42,12 @@ export const AuthProvider = ({ children }) => {
   const login = async () => {
     const auth = getAuth();
     try {
+      // Prevenir múltiples popups
+      if (auth.currentUser) {
+        console.log("Usuario ya autenticado");
+        return;
+      }
+
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
@@ -61,7 +67,13 @@ export const AuthProvider = ({ children }) => {
       setUser(user);
       console.log("Usuario autenticado y datos guardados");
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+      if (error.code === "auth/cancelled-popup-request") {
+        console.error("Solicitud de popup cancelada");
+      } else if (error.code === "auth/popup-closed-by-user") {
+        console.error("Popup cerrado por el usuario");
+      } else {
+        console.error("Error al iniciar sesión:", error);
+      }
     }
   };
 
