@@ -9,7 +9,7 @@ function TimeLine() {
 
   useEffect(() => {
     axios
-      .get("https://cronology-v3.onrender.com/events")
+      .get("https://kind-raine-leggero-0395195c.koyeb.app/events")
       .then((response) => {
         const sortedEvents = response.data.sort((a, b) =>
           sortByNewest
