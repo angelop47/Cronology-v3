@@ -12,7 +12,7 @@ const NewEvent = () => {
   // Fetch categories from the backend
   useEffect(() => {
     axios
-      .get("https://kind-raine-leggero-0395195c.koyeb.app/categories")
+      .get("https://kind-raine-leggero-0395195c.koyeb.app//categories")
       .then((response) => {
         const categoryOptions = response.data.map((cat) => ({
           value: cat._id,
@@ -36,7 +36,7 @@ const NewEvent = () => {
 
     try {
       const response = await axios.post(
-        "https://kind-raine-leggero-0395195c.koyeb.app/events",
+        "https://kind-raine-leggero-0395195c.koyeb.app//events",
         newEvent
       );
       console.log("Event created successfully:", response.data);

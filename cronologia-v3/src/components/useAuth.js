@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
         // Guardar o actualizar el usuario en MongoDB
         await axios.post(
-          "https://kind-raine-leggero-0395195c.koyeb.app/users/auth/google",
+          "https://kind-raine-leggero-0395195c.koyeb.app//users/auth/google",
           userData
         );
 
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
 
       // Llamar a la API de tu backend para guardar o actualizar el usuario en MongoDB
       await axios.post(
-        "https://kind-raine-leggero-0395195c.koyeb.app/users/auth/google",
+        "https://kind-raine-leggero-0395195c.koyeb.app//users/auth/google",
         userData
       );
 

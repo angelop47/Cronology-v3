@@ -15,10 +15,6 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   photo: {
-    type: String, // Store the image in Base64 format
-    required: false,
-  },
-  description: {
     type: String,
     required: false,
   },

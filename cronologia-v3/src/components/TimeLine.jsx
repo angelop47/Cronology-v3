@@ -8,9 +8,13 @@ function TimeLine() {
   const [sortByNewest, setSortByNewest] = useState(true);
 
   useEffect(() => {
-    axios
-      .get("https://kind-raine-leggero-0395195c.koyeb.app/events")
-      .then((response) => {
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get(
+          "https://kind-raine-leggero-0395195c.koyeb.app//events"
+        );
+        console.log("Respuesta de la API:", response.data); // Log para ver la respuesta de la API
+
         const sortedEvents = response.data.sort((a, b) =>
           sortByNewest
             ? new Date(b.date) - new Date(a.date)
@@ -22,13 +26,18 @@ function TimeLine() {
           date: new Date(event.date).toISOString().slice(0, 10),
         }));
 
+        console.log("Eventos formateados:", formattedEvents); // Log para ver los eventos formateados
+
         setEvents(formattedEvents);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error.message);
         setLoading(false);
-      });
+        console.error("Error al obtener los eventos:", error); // Log para ver el error
+      }
+    };
+
+    fetchEvents();
   }, [sortByNewest]);
 
   const handleSortToggle = () => {
@@ -67,6 +76,9 @@ function TimeLine() {
               <p className="mb-4 text-sm font-medium text-gray-700 dark:text-gray-300">
                 Categoría:{" "}
                 {event.categoryId ? event.categoryId.name : "Sin categoría"}
+              </p>
+              <p className="mb-4 text-sm font-medium text-gray-700 dark:text-gray-300">
+                Usuario: {event.userId ? event.userId.name : "Sin usuario"}
               </p>
               <a
                 href="#"
