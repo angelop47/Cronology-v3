@@ -11,7 +11,7 @@ function TimeLine() {
     const fetchEvents = async () => {
       try {
         const response = await axios.get(
-          "https://kind-raine-leggero-0395195c.koyeb.app//events"
+          "https://kind-raine-leggero-0395195c.koyeb.app/events"
         );
         console.log("Respuesta de la API:", response.data); // Log para ver la respuesta de la API
 
