@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
+import { BASE_URL } from "../utils/utils";
 
 const NewEvent = () => {
   const [name, setName] = useState("");
@@ -12,7 +13,7 @@ const NewEvent = () => {
   // Fetch categories from the backend
   useEffect(() => {
     axios
-      .get("https://kind-raine-leggero-0395195c.koyeb.app/categories")
+      .get(`${BASE_URL}/categories`)
       .then((response) => {
         const categoryOptions = response.data.map((cat) => ({
           value: cat._id,
@@ -35,10 +36,7 @@ const NewEvent = () => {
     console.log("Submitting event:", newEvent);
 
     try {
-      const response = await axios.post(
-        "https://kind-raine-leggero-0395195c.koyeb.app/events",
-        newEvent
-      );
+      const response = await axios.post(`${BASE_URL}/events`, newEvent);
       console.log("Event created successfully:", response.data);
       // Clear the form after successful submission
       setName("");

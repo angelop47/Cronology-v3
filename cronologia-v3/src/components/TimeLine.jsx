@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
+import { BASE_URL } from "../utils/utils";
 
 function TimeLine() {
   const [events, setEvents] = useState([]);
@@ -10,9 +11,7 @@ function TimeLine() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(
-          "https://kind-raine-leggero-0395195c.koyeb.app/events"
-        );
+        const response = await axios.get(`${BASE_URL}/events`);
         console.log("Respuesta de la API:", response.data); // Log para ver la respuesta de la API
 
         const sortedEvents = response.data.sort((a, b) =>

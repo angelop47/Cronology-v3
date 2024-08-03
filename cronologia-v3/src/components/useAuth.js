@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import axios from "axios";
 import { auth, provider } from "../utils/firebase-config";
+import { BASE_URL } from "../utils/utils";
 
 const AuthContext = createContext();
 
@@ -25,10 +26,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         // Guardar o actualizar el usuario en MongoDB
-        await axios.post(
-          "https://kind-raine-leggero-0395195c.koyeb.app/users/auth/google",
-          userData
-        );
+        await axios.post(`${BASE_URL}/users/auth/google`, userData);
 
         setUser(firebaseUser);
       } else {
@@ -59,10 +57,7 @@ export const AuthProvider = ({ children }) => {
       };
 
       // Llamar a la API de tu backend para guardar o actualizar el usuario en MongoDB
-      await axios.post(
-        "https://kind-raine-leggero-0395195c.koyeb.app/users/auth/google",
-        userData
-      );
+      await axios.post(`${BASE_URL}/users/auth/google`, userData);
 
       setUser(user);
       console.log("Usuario autenticado y datos guardados");
