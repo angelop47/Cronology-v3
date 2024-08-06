@@ -12,7 +12,6 @@ function TimeLine() {
     const fetchEvents = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/events`);
-        console.log("Respuesta de la API:", response.data); // Log para ver la respuesta de la API
 
         const sortedEvents = response.data.sort((a, b) =>
           sortByNewest
@@ -25,14 +24,12 @@ function TimeLine() {
           date: new Date(event.date).toISOString().slice(0, 10),
         }));
 
-        console.log("Eventos formateados:", formattedEvents); // Log para ver los eventos formateados
-
         setEvents(formattedEvents);
         setLoading(false);
       } catch (error) {
         setError(error.message);
         setLoading(false);
-        console.error("Error al obtener los eventos:", error); // Log para ver el error
+        console.error("Error al obtener los eventos:", error);
       }
     };
 
@@ -77,7 +74,7 @@ function TimeLine() {
                 {event.categoryId ? event.categoryId.name : "Sin categoría"}
               </p>
               <p className="mb-4 text-sm font-medium text-gray-700 dark:text-gray-300">
-                Usuario: {event.userId ? event.userId.name : "Sin usuario"}
+                Usuario: {event.userName} {/* Mostrar el nombre del usuario */}
               </p>
               <a
                 href="#"

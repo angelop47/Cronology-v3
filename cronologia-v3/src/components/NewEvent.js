@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
+import { useAuth } from "../components/useAuth"; // Importa el hook de autenticación
 import { BASE_URL } from "../utils/utils";
 
 const NewEvent = () => {
+  const { user } = useAuth(); // Obtén el usuario autenticado
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState(null);
   const [categories, setCategories] = useState([]);
 
-  // Fetch categories from the backend
   useEffect(() => {
     axios
       .get(`${BASE_URL}/categories`)
@@ -31,31 +32,28 @@ const NewEvent = () => {
       date,
       description,
       categoryId: category ? category.value : "",
+      userEmail: user.email, // Añadir el email del usuario autenticado
     };
-
-    console.log("Submitting event:", newEvent);
 
     try {
       const response = await axios.post(`${BASE_URL}/events`, newEvent);
       console.log("Event created successfully:", response.data);
-      // Clear the form after successful submission
       setName("");
       setDate("");
       setDescription("");
       setCategory(null);
     } catch (error) {
       console.error("Error creating event:", error);
-      console.error("Error response:", error.response); // Added this line to log the full error response
     }
   };
 
   const customStyles = {
     control: (provided) => ({
       ...provided,
-      backgroundColor: "#E5E7EB", // Tailwind bg-gray-200 equivalent
-      borderColor: "#E5E7EB", // Tailwind border-gray-200 equivalent
+      backgroundColor: "#E5E7EB",
+      borderColor: "#E5E7EB",
       padding: "0.5rem",
-      width: "300px", // Adjust the width as needed
+      width: "300px",
     }),
     option: (provided, state) => ({
       ...provided,
@@ -63,10 +61,10 @@ const NewEvent = () => {
         ? "#3B82F6"
         : state.isFocused
         ? "#E5E7EB"
-        : "white", // Tailwind bg-blue-500 and bg-gray-200 equivalent
+        : "white",
       color: state.isSelected ? "white" : "black",
       "&:hover": {
-        backgroundColor: "#E5E7EB", // Tailwind bg-gray-300 equivalent
+        backgroundColor: "#E5E7EB",
       },
     }),
     menu: (provided) => ({

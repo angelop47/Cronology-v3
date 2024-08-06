@@ -22,10 +22,9 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: false,
+  userEmail: {
+    type: String,
+    required: true,
   },
 });
 
