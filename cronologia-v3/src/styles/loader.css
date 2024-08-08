@@ -1,11 +1,21 @@
+.loader-container {
+  position: fixed; /* Asegúrate de que el contenedor esté fijo */
+  top: 0;
+  left: 0;
+  width: 100%; /* Ocupa todo el ancho de la pantalla */
+  height: 100%; /* Ocupa todo el alto de la pantalla */
+  display: flex; /* Utiliza flexbox para centrar el contenido */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+  z-index: 1000; /* Asegúrate de que el spinner esté encima de otros contenidos */
+}
+
 .loader {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
   animation: rotate 1s linear infinite;
 }
 
@@ -16,7 +26,7 @@
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 5px solid #1386eb;
+  border: 5px solid #5c5c5c;
   animation: prixClipFix 2s linear infinite;
 }
 

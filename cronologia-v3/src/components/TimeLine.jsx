@@ -43,7 +43,12 @@ function TimeLine() {
 
   const memoizedEvents = useMemo(() => events, [events]);
 
-  if (loading) return <div className="loader"></div>;
+  if (loading)
+    return (
+      <div className="loader-container">
+        <div className="loader"></div>
+      </div>
+    );
   if (error) return <div>Error: {error}</div>;
 
   return (
