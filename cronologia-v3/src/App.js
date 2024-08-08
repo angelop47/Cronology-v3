@@ -9,13 +9,15 @@ import About from "./screens/About";
 import Contact from "./screens/Contact";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./screens/Login";
-import LoginButton from "./components/LoginButton";
-import LogoutButton from "./components/LogoutButton";
+// import LoginButton from "./components/LoginButton";
+// import LogoutButton from "./components/LogoutButton";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <div>
-      <Header />
+      <Navbar />
+      {/* <Header /> */}
       {/* <LoginButton />
       <br></br>
       <LogoutButton /> */}
