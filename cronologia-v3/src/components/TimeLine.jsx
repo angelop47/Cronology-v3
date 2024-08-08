@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { BASE_URL } from "../utils/utils";
+import "../styles/loader.css";
 
 function TimeLine() {
   const [events, setEvents] = useState([]);
@@ -42,7 +43,7 @@ function TimeLine() {
 
   const memoizedEvents = useMemo(() => events, [events]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="loader"></div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
