@@ -1,21 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
   Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Bars3BottomRightIcon } from "@heroicons/react/24/solid";
-import { useAuth } from "./useAuth";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "./useAuth";
 
 const navigation = [
   { name: "Home", href: "/", current: false },
-  { name: "New Event", href: "/new", current: false },
+  { name: "New Event", href: "/new", current: false, protected: true },
   { name: "About", href: "/about", current: false },
   { name: "Contact", href: "/contact", current: false },
 ];
@@ -53,6 +50,14 @@ export default function Navbar() {
     }
   }, [dropdownOpen]);
 
+  const handleNavigation = (href, protectedRoute) => {
+    if (protectedRoute && !user) {
+      navigate("/login");
+    } else {
+      navigate(href);
+    }
+  };
+
   const handleLoginClick = () => {
     navigate("/login"); // Redirige a la página de inicio de sesión
     setDropdownOpen(false);
@@ -64,7 +69,7 @@ export default function Navbar() {
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+            <Disclosure.Button className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
               <Bars3Icon
@@ -75,7 +80,7 @@ export default function Navbar() {
                 aria-hidden="true"
                 className="hidden h-6 w-6 group-data-[open]:block"
               />
-            </DisclosureButton>
+            </Disclosure.Button>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
@@ -86,10 +91,9 @@ export default function Navbar() {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <button
                     key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? "page" : undefined}
+                    onClick={() => handleNavigation(item.href, item.protected)}
                     className={classNames(
                       item.current
                         ? "bg-gray-200 text-gray-900"
@@ -98,7 +102,7 @@ export default function Navbar() {
                     )}
                   >
                     {item.name}
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>
@@ -163,13 +167,13 @@ export default function Navbar() {
         </div>
       </div>
 
-      <DisclosurePanel className="sm:hidden">
+      <Disclosure.Panel className="sm:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {navigation.map((item) => (
-            <DisclosureButton
+            <Disclosure.Button
               key={item.name}
-              as="a"
-              href={item.href}
+              as="button"
+              onClick={() => handleNavigation(item.href, item.protected)}
               aria-current={item.current ? "page" : undefined}
               className={classNames(
                 item.current
@@ -177,13 +181,12 @@ export default function Navbar() {
                   : "text-gray-700 hover:bg-gray-100",
                 "block rounded-md px-3 py-2 text-base font-medium"
               )}
-              onClick={() => setOpen(false)} // Cierra el menú al hacer clic en un enlace
             >
               {item.name}
-            </DisclosureButton>
+            </Disclosure.Button>
           ))}
         </div>
-      </DisclosurePanel>
+      </Disclosure.Panel>
     </Disclosure>
   );
 }
